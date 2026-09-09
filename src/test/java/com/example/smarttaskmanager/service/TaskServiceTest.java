@@ -21,6 +21,11 @@ import static org.mockito.ArgumentMatchers.any;
 import java.util.Optional;
 import com.example.smarttaskmanager.exception.TaskNotFoundException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
 
@@ -36,14 +41,20 @@ class TaskServiceTest {
         Task task1 = new Task(1L, "Task 1", "Description 1", false);
         Task task2 = new Task(2L, "Task 2", "Description 2", true);
 
-        when(taskRepository.findAll())
-                .thenReturn(List.of(task1, task2));
+        Pageable pageable = PageRequest.of(0, 2);
 
-        List<Task> tasks = taskService.getAllTasks();
+        Page<Task> page = new PageImpl<>(List.of(task1, task2));
 
-        assertEquals(2, tasks.size());
-        assertEquals("Task 1", tasks.get(0).getTitle());
-        assertEquals("Task 2", tasks.get(1).getTitle());
+        when(taskRepository.findAll(pageable))
+                .thenReturn(page);
+
+        Page<Task> tasks = taskService.getAllTasks(pageable);
+
+        assertEquals(2, tasks.getContent().size());
+        assertEquals("Task 1", tasks.getContent().get(0).getTitle());
+        assertEquals("Task 2", tasks.getContent().get(1).getTitle());
+
+        verify(taskRepository).findAll(pageable);
     }
 
     @Test
