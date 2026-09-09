@@ -64,4 +64,8 @@ public class TaskService {
         return taskRepository.findByCompleted(completed, pageable);
     }
 
+    public Page<Task> searchTasks(String title, Pageable pageable) {
+        return taskRepository.findByTitleContainingIgnoreCase(title, pageable);
+    }
+
 }

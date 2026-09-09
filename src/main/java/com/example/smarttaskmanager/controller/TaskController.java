@@ -54,4 +54,12 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
+    @GetMapping("/tasks/search")
+    public Page<Task> searchTasks(
+            @RequestParam String title,
+            Pageable pageable) {
+
+        return taskService.searchTasks(title, pageable);
+    }
+
 }
