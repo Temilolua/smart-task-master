@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 public class TaskController {
@@ -18,8 +20,15 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    public Page<Task> getAllTasks(
+            @RequestParam(required = false) Boolean completed,
+            Pageable pageable) {
+
+        if (completed != null) {
+            return taskService.getTasksByCompleted(completed, pageable);
+        }
+
+        return taskService.getAllTasks(pageable);
     }
 
     @GetMapping("/tasks/{id}")
