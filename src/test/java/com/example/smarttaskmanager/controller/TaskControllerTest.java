@@ -66,7 +66,6 @@ class TaskControllerTest {
 
     @Test
     void testGetTaskById() throws Exception {
-
         Task task = new Task(
                 1L,
                 "Study",
