@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private int number;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
